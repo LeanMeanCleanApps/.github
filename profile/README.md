@@ -2,7 +2,7 @@
   <img src="https://raw.githubusercontent.com/LeanMeanCleanApps/brand/main/assets/social/png/banner.png" alt="Lean Mean Clean Apps: Clean Architecture templates for .NET, minus the ceremony." width="100%">
 </p>
 
-Every template is built on .NET 10 with the same Application and Infrastructure layers, and swaps only the presentation layer. Learn one and you know them all.
+Every template is built on .NET 10 with the same Application and Infrastructure layers, and swaps only the presentation layer. Learn one and you know them all. Same genes, different haircuts.
 
 | | Template | Builds | Install |
 | --- | --- | --- | --- |
