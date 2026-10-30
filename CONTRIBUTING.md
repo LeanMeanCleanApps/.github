@@ -2,7 +2,7 @@
 
 Thanks for stopping by. Bug reports, ideas, typo fixes and pull requests are all welcome, in that order of how quickly they get a reply.
 
-These are personal open source projects, built and looked after by [Stephen Walsh](https://github.com/stphnwlsh) in spare time, with strong coffee and a healthy disregard for ceremony. There's one maintainer, so replies are best effort, and the fastest way to get something changed is to make it easy to say yes to.
+These are [Lean Mean Clean Apps](https://leanmeancleanapps.github.io/) projects, built and looked after in spare time by a small team, with strong coffee and a healthy disregard for pomp and ceremony. Small as in one person, for now, so replies are best effort, and the fastest way to get something changed is to make it easy to say yes to. If you'd like to make it two, pull requests are how that starts.
 
 ## Before you start
 
