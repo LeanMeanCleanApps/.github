@@ -2,7 +2,7 @@
 
 ## Supported Versions
 
-Security fixes are made on each repository's `main` branch and released in the latest version on NuGet.
+Security fixes are made on each repository's `main` branch. For the templates, the fix ships in the next version on NuGet, which is released out of cycle when a fix can't wait for the monthly release.
 
 ## Reporting a Vulnerability
 

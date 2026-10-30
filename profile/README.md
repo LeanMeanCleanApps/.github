@@ -12,6 +12,6 @@ Every template is built on .NET 10 with the same Application and Infrastructure 
 | <img src="https://raw.githubusercontent.com/LeanMeanCleanApps/brand/main/assets/logos/mcp/png/mcp-tile-128.png" width="64" alt=""> | [Clean Model Context Protocol](https://github.com/stphnwlsh/CleanModelContextProtocol) | Model Context Protocol servers | `dotnet new install CleanModelContextProtocol.Template` |
 | <img src="https://raw.githubusercontent.com/LeanMeanCleanApps/brand/main/assets/logos/lambda/png/lambda-tile-128.png" width="64" alt=""> | [Clean Lambda Function](https://github.com/stphnwlsh/CleanLamdaFunction) | AWS Lambda | `dotnet new install CleanLambdaFunction.Template` |
 
-Logos, colours and social templates live in [brand](https://github.com/LeanMeanCleanApps/brand).
+There's a one-page site at [leanmeancleanapps.github.io](https://leanmeancleanapps.github.io), and the logos, colours and social templates live in [brand](https://github.com/LeanMeanCleanApps/brand), with their own [brand site](https://leanmeancleanapps.github.io/brand/).
 
 If these save you some time, you can [sponsor the work](https://github.com/sponsors/stphnwlsh). Made by [Stephen Walsh](https://github.com/stphnwlsh) with strong coffee and a healthy disregard for ceremony.
