@@ -1,6 +1,6 @@
 ## Summary
 
-<!-- What does this change and why? A sentence or two is plenty. -->
+<!-- What does this change and why? A sentence or two is plenty. Save the novel for your memoirs. -->
 
 ## Related issues
 
