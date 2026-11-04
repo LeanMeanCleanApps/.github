@@ -1,0 +1,107 @@
+name: Shared Layers Drift
+
+# Application, Infrastructure, their tests and the shared skills should match in all five templates,
+# apart from the template's own name. This lives here, not in a template, so it never ends up in
+# anyone's copy of one. It only reads the public template repositories.
+
+on:
+  schedule:
+    # Mondays, off the hour, because GitHub delays more runs at :00.
+    - cron: "17 9 * * 1"
+      timezone: "America/Chicago"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  drift:
+    name: Drift
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out Minimal API
+        uses: actions/checkout@v7
+        with:
+          repository: LeanMeanCleanApps/CleanMinimalApi
+          path: CleanMinimalApi
+          persist-credentials: false
+
+      - name: Check out MCP
+        uses: actions/checkout@v7
+        with:
+          repository: LeanMeanCleanApps/CleanModelContextProtocol
+          path: CleanModelContextProtocol
+          persist-credentials: false
+
+      - name: Check out GraphQL
+        uses: actions/checkout@v7
+        with:
+          repository: LeanMeanCleanApps/CleanGraphQLApi
+          path: CleanGraphQLApi
+          persist-credentials: false
+
+      - name: Check out Web API
+        uses: actions/checkout@v7
+        with:
+          repository: LeanMeanCleanApps/CleanWebApi
+          path: CleanWebApi
+          persist-credentials: false
+
+      - name: Check out Lambda Function
+        uses: actions/checkout@v7
+        with:
+          repository: LeanMeanCleanApps/CleanLambdaFunction
+          path: CleanLambdaFunction
+          persist-credentials: false
+
+      - name: Compare with Minimal API
+        shell: bash
+        run: |
+          set -uo pipefail
+
+          reference=CleanMinimalApi
+          shared=(src/Application src/Infrastructure tests/Application.Tests.Unit tests/Infrastructure.Tests.Integration)
+
+          # Skills marked "scope: shared" travel with the shared layers.
+          for skill in "$reference"/.agents/skills/*/SKILL.md; do
+            if grep -q "^  scope: shared" "$skill"; then
+              shared+=("$(dirname "${skill#"$reference"/}")")
+            fi
+          done
+
+          # Swap each template's name for the reference's, so only real differences are left.
+          normalise() {
+            local repo=$1 out=$2
+            for path in "${shared[@]}"; do
+              [ -e "$repo/$path" ] || continue
+              while IFS= read -r -d '' file; do
+                mkdir -p "$out/$(dirname "${file#"$repo"/}")"
+                sed "s/$repo/$reference/g" "$file" > "$out/${file#"$repo"/}"
+              done < <(find "$repo/$path" -type f -not -path '*/bin/*' -not -path '*/obj/*' -print0)
+            done
+          }
+
+          normalise "$reference" "normalised/$reference"
+          failed=0
+
+          {
+            echo "## Shared layers drift"
+            echo
+            echo "Compared with $reference. Paths: ${#shared[@]}."
+            echo
+          } >> "$GITHUB_STEP_SUMMARY"
+
+          for repo in CleanModelContextProtocol CleanGraphQLApi CleanWebApi CleanLambdaFunction; do
+            normalise "$repo" "normalised/$repo"
+
+            if differences=$(diff -rq "normalised/$reference" "normalised/$repo"); then
+              echo "- ✅ $repo matches" >> "$GITHUB_STEP_SUMMARY"
+            else
+              failed=1
+              echo "- ❌ $repo differs:" >> "$GITHUB_STEP_SUMMARY"
+              sed -e "s|normalised/||g" -e 's/^/  - /' <<< "$differences" >> "$GITHUB_STEP_SUMMARY"
+              diff -ru "normalised/$reference" "normalised/$repo" || true
+            fi
+          done
+
+          exit $failed
