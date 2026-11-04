@@ -8,7 +8,7 @@ name: Project sync
 # and closes the milestone. If a template didn't release, it opens an issue instead.
 #
 # The default token can't edit an org project, so this uses the Lean Mean Clean project bot app:
-# its ID in the PROJECT_APP_ID variable and its private key in the PROJECT_APP_PRIVATE_KEY secret.
+# its ID in PROJECT_APP_ID (a variable or a secret) and its private key in the PROJECT_APP_PRIVATE_KEY secret.
 
 on:
   issues:
@@ -44,7 +44,8 @@ jobs:
         id: token
         uses: actions/create-github-app-token@v3
         with:
-          app-id: ${{ vars.PROJECT_APP_ID }}
+          # The App ID works as a variable or a secret, at the repository or the organisation level.
+          app-id: ${{ vars.PROJECT_APP_ID || secrets.PROJECT_APP_ID }}
           private-key: ${{ secrets.PROJECT_APP_PRIVATE_KEY }}
           owner: ${{ github.repository_owner }}
 
