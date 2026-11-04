@@ -253,6 +253,11 @@ jobs:
         run: |
           set -euo pipefail
 
+          if [ "$(gh repo view --json hasIssuesEnabled --jq .hasIssuesEnabled)" != "true" ]; then
+            echo "::warning::Issues are turned off in $GH_REPO, so there's no drift issue. The fix prompt is in the run summary."
+            exit 0
+          fi
+
           title="The templates' shared files have drifted"
           issue=$(gh issue list --state open --search "in:title \"$title\"" --json number,title \
             --jq "map(select(.title == \"$title\")) | .[0].number // empty")
