@@ -26,8 +26,10 @@ on:
 permissions:
   contents: read
 
+# One queue per issue. A single shared queue only keeps the newest waiting run, so closing
+# several issues at once would cancel the syncs in between.
 concurrency:
-  group: project-sync
+  group: project-sync-${{ github.event.issue.number || 'release' }}
   cancel-in-progress: false
 
 jobs:
