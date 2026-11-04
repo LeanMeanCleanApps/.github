@@ -2,7 +2,7 @@
   <img src="https://raw.githubusercontent.com/LeanMeanCleanApps/brand/main/assets/banners/png/org.png" alt="Lean Mean Clean Apps: the shared bits. Community files every repository picks up, minus the copy and paste." width="100%">
 </p>
 
-# .github
+# Lean Mean Clean Apps – Shared
 
 The shared bits of the [Lean Mean Clean Apps](https://github.com/LeanMeanCleanApps) organisation.
 
