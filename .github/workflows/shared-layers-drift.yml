@@ -2,8 +2,9 @@ name: Shared Layers Drift
 
 # Application, Infrastructure, their tests, every skill but the presentation ones, and the build,
 # agent, community and GitHub files should match in all five templates, apart from the template's
-# own name. This lives here, not in a template, so it never ends up in
-# anyone's copy of one. It only reads the public template repositories.
+# own name, and any package two or more of them use should be on the same version. This lives here, not in a template, so it never ends up in anyone's copy of one. It only
+# reads the public template repositories. When something drifts, it writes a prompt you can hand
+# to an agent and keeps one issue open here with it, then closes that issue once it's green again.
 
 on:
   schedule:
@@ -14,6 +15,8 @@ on:
 
 permissions:
   contents: read
+  # To open, update and close the drift issue in this repository.
+  issues: write
 
 jobs:
   drift:
@@ -56,6 +59,7 @@ jobs:
           persist-credentials: false
 
       - name: Compare with Minimal API
+        id: compare
         shell: bash
         run: |
           set -uo pipefail
@@ -126,7 +130,9 @@ jobs:
           }
 
           normalise "$reference" "normalised/$reference"
-          failed=0
+          mkdir -p drift
+          : > drift/files.md
+          : > drift/full.diff
 
           {
             echo "## Shared layers drift"
@@ -141,11 +147,156 @@ jobs:
             if differences=$(diff -rq "normalised/$reference" "normalised/$repo"); then
               echo "- ✅ $repo matches" >> "$GITHUB_STEP_SUMMARY"
             else
-              failed=1
-              echo "- ❌ $repo differs:" >> "$GITHUB_STEP_SUMMARY"
-              sed -e "s|normalised/||g" -e 's/^/  - /' <<< "$differences" >> "$GITHUB_STEP_SUMMARY"
-              diff -ru "normalised/$reference" "normalised/$repo" || true
+              listed=$(sed -e "s|normalised/||g" -e 's/^/  - /' <<< "$differences")
+              printf -- '- %s differs:\n%s\n' "$repo" "$listed" >> drift/files.md
+              printf -- '- ❌ %s differs:\n%s\n' "$repo" "$listed" >> "$GITHUB_STEP_SUMMARY"
+              (cd normalised && diff -ru "$reference" "$repo") >> drift/full.diff || true
             fi
           done
 
-          exit $failed
+          # Any package that two or more templates use should be on the same version in all of them.
+          versions() {
+            grep -o '<PackageVersion Include="[^"]*" Version="[^"]*"' "$1/Directory.Packages.props" |
+              sed -E "s/.*Include=\"([^\"]*)\" Version=\"([^\"]*)\"/\1 \2 $1/"
+          }
+          packages=$(for repo in CleanMinimalApi CleanModelContextProtocol CleanGraphQLApi CleanWebApi CleanLambdaFunction; do
+            versions "$repo"
+          done | sort)
+          # Input is sorted by package then version, so each package's versions arrive together.
+          mismatched=$(awk '
+            function flush() { if (count > 1) print "  - " package ":" line }
+            $1 != package { flush(); package = $1; version = ""; count = 0; line = "" }
+            $2 != version { version = $2; count++; line = line (count > 1 ? ";" : "") " " $2 " in" }
+            { line = line " " $3 }
+            END { flush() }
+          ' <<< "$packages")
+
+          if [ -n "$mismatched" ]; then
+            printf -- '- Package versions differ in Directory.Packages.props:\n%s\n' "$mismatched" >> drift/files.md
+            printf -- '- ❌ Package versions differ:\n%s\n' "$mismatched" >> "$GITHUB_STEP_SUMMARY"
+          else
+            echo "- ✅ Every package the templates have in common is on the same version" >> "$GITHUB_STEP_SUMMARY"
+          fi
+
+          if [ -s drift/files.md ]; then
+            echo "drifted=true" >> "$GITHUB_OUTPUT"
+            cat drift/full.diff
+          else
+            echo "drifted=false" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Write the fix prompt
+        if: steps.compare.outputs.drifted == 'true'
+        shell: bash
+        env:
+          RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+        run: |
+          set -euo pipefail
+
+          {
+            cat <<'EOF'
+          You're working on the Lean Mean Clean Apps templates in the LeanMeanCleanApps organisation on GitHub: CleanMinimalApi, CleanModelContextProtocol, CleanGraphQLApi, CleanWebApi and CleanLambdaFunction. Everything except the Presentation layer, the presentation skills and each template's own README, AGENTS.md rows, package and pipeline should match in all five once each template's name is swapped for CleanMinimalApi. The weekly drift check found files that don't.
+
+          What differs, compared with CleanMinimalApi:
+
+          EOF
+            cat drift/files.md
+            cat <<'EOF'
+
+          Fix it like this:
+
+          1. Clone all five templates side by side. Read AGENTS.md, .agents/agents/jacques.md and .agents/skills/family-sync/SKILL.md in CleanMinimalApi before you change anything.
+          2. For every file above, use git log in each template to find which copy changed last and the pull request that changed it. Minimal API is only the reference for the comparison. A fix that was merged in one template and never carried to the others should be copied to the others, not reverted.
+          3. If more than one copy changed and they disagree, or you can't tell which change was intended, stop and ask before you change anything. Say which files and which pull requests.
+          4. Follow family-sync. If CleanMinimalApi needs the change, make it there first. Then open the same branch, chore/sync-shared-files, with the same title and description in every template that needs it, in this order: MCP, GraphQL, Web API, Lambda Function. Swap the template name the way family-sync says, and copy family-sync itself as it is.
+          5. Run dotnet build, dotnet test and dotnet format --verify-no-changes in every template you change, and keep line coverage at or above 95%.
+          6. Prove the copies match with the commands under Check in family-sync. Don't merge anything yourself.
+          7. Once the pull requests are merged, run the Shared Layers Drift workflow in LeanMeanCleanApps/.github from the Actions tab. It closes the drift issue when everything matches.
+          EOF
+            echo
+            echo "The check that found this: $RUN_URL"
+          } | sed 's/^          //' > drift/prompt.md
+
+          {
+            cat drift/prompt.md
+            echo
+            echo "The full diff, with each template's name swapped for CleanMinimalApi:"
+            echo
+            cat drift/full.diff
+          } > drift/drift-fix-prompt.md
+
+          {
+            echo
+            echo "### Fix prompt"
+            echo
+            echo "Copy this into your agent, or download \`drift-fix-prompt.md\` from this run's artifacts, which has the full diff too."
+            echo
+            echo '``````text'
+            cat drift/prompt.md
+            echo '``````'
+          } >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Upload the fix prompt
+        if: steps.compare.outputs.drifted == 'true'
+        uses: actions/upload-artifact@v7
+        with:
+          name: drift-fix-prompt
+          path: drift/drift-fix-prompt.md
+
+      - name: Open, update or close the drift issue
+        shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+          DRIFTED: ${{ steps.compare.outputs.drifted }}
+          RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+        run: |
+          set -euo pipefail
+
+          title="The templates' shared files have drifted"
+          issue=$(gh issue list --state open --search "in:title \"$title\"" --json number,title \
+            --jq "map(select(.title == \"$title\")) | .[0].number // empty")
+
+          if [ "$DRIFTED" != "true" ]; then
+            if [ -n "$issue" ]; then
+              gh issue close "$issue" --reason completed --comment "All five templates match again. Checked in $RUN_URL."
+            fi
+            exit 0
+          fi
+
+          # Issue bodies stop at 65,536 characters, so the diff is cut short here. The artifact has all of it.
+          diff=$(head -c 40000 drift/full.diff)
+          {
+            echo "The weekly drift check found shared files that don't match in all five templates. Last checked in $RUN_URL."
+            echo
+            echo "## Fix prompt"
+            echo
+            echo "Copy this into your agent. The \`drift-fix-prompt.md\` artifact on the run has the same prompt with the full diff."
+            echo
+            echo '``````text'
+            cat drift/prompt.md
+            echo '``````'
+            echo
+            echo "<details><summary>The diff</summary>"
+            echo
+            echo '``````diff'
+            printf '%s\n' "$diff"
+            [ "$(wc -c < drift/full.diff)" -le 40000 ] || echo "... cut short, see the artifact for the rest"
+            echo '``````'
+            echo
+            echo "</details>"
+          } > drift/issue.md
+
+          if [ -n "$issue" ]; then
+            gh issue edit "$issue" --body-file drift/issue.md
+          else
+            gh issue create --title "$title" --body-file drift/issue.md --assignee stphnwlsh || \
+              gh issue create --title "$title" --body-file drift/issue.md
+          fi
+
+      - name: Fail when the templates have drifted
+        if: steps.compare.outputs.drifted == 'true'
+        shell: bash
+        run: |
+          echo "::error::The templates' shared files have drifted. See the run summary and the drift issue."
+          exit 1
