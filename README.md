@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="https://raw.githubusercontent.com/LeanMeanCleanApps/brand/main/assets/banners/png/org.png" alt="Lean Mean Clean Apps: the shared bits. Community files every repository picks up, minus the copy and paste." width="100%">
+  <img src="https://raw.githubusercontent.com/LeanMeanCleanApps/brand/main/assets/banners/png/org.png" alt="Lean Mean Clean Apps: The Shared Bits. Community files every repository picks up, minus the copy and paste." width="100%">
 </p>
 
 # Lean Mean Clean Apps – Shared
