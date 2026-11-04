@@ -1,0 +1,63 @@
+name: Project sync
+
+# Keeps the Lean Mean Clean templates project up to date, so nobody has to.
+#
+# When an issue here closes, it fills in Done on, the Month and the next release milestone, and
+# moves the issue to Merged. On the 2nd of each month it checks all five templates released on the
+# 1st, moves that release's Merged issues to Released, rolls anything still open into next month,
+# and closes the milestone. If a template didn't release, it opens an issue instead.
+#
+# The default token can't edit an org project, so this uses the Lean Mean Clean project bot app:
+# its ID in the PROJECT_APP_ID variable and its private key in the PROJECT_APP_PRIVATE_KEY secret.
+
+on:
+  issues:
+    types: [opened, closed, reopened]
+  schedule:
+    # The 2nd, the morning after the release, off the hour because GitHub delays more runs at :00.
+    - cron: "23 6 2 * *"
+      timezone: "America/Chicago"
+  workflow_dispatch:
+    inputs:
+      month:
+        description: "Release month to roll over, like 2026-12. Leave empty for this month."
+        required: false
+
+permissions:
+  contents: read
+
+concurrency:
+  group: project-sync
+  cancel-in-progress: false
+
+jobs:
+  sync:
+    name: Sync
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out
+        uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+
+      - name: Get a project token
+        id: token
+        uses: actions/create-github-app-token@v3
+        with:
+          app-id: ${{ vars.PROJECT_APP_ID }}
+          private-key: ${{ secrets.PROJECT_APP_PRIVATE_KEY }}
+          owner: ${{ github.repository_owner }}
+
+      - name: Update the board for this issue
+        if: github.event_name == 'issues'
+        env:
+          GH_TOKEN: ${{ steps.token.outputs.token }}
+        run: python3 .github/scripts/project_sync.py issue
+
+      - name: Roll over the monthly release
+        if: github.event_name != 'issues'
+        env:
+          GH_TOKEN: ${{ steps.token.outputs.token }}
+          RELEASE_MONTH: ${{ inputs.month }}
+          RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+        run: python3 .github/scripts/project_sync.py release
