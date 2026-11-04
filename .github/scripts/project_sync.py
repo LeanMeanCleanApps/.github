@@ -4,7 +4,7 @@ Two jobs, picked by the first argument:
 
   issue    Runs when an issue in this repository is opened, closed or reopened. It adds the issue
            to the project, and when the issue closes it fills in Done on, the Month and the next
-           release milestone, then moves it to Merged.
+           release milestone, then moves it to Merged. Closed as not planned, it's archived.
   release  Runs on the 2nd of each month. If all five templates have a release for the 1st, it
            moves that milestone's Merged items to Released, rolls anything still open into next
            month, closes the milestone and makes sure the next two months exist. If a template
@@ -243,7 +243,13 @@ def on_issue():
         return
 
     if issue.get("state_reason") != "completed":
-        summary("- Closed as not planned, so the board is left as it is.")
+        graphql(
+            """mutation($project: ID!, $item: ID!) {
+              archiveProjectV2Item(input: {projectId: $project, itemId: $item}) { clientMutationId } }""",
+            project=project.id,
+            item=item,
+        )
+        summary("- Closed as not planned, so it's archived off the board.")
         return
 
     closed = dt.date.fromisoformat(issue["closed_at"][:10])
