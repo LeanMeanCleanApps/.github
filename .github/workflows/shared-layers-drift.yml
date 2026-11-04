@@ -1,7 +1,8 @@
 name: Shared Layers Drift
 
-# Application, Infrastructure, their tests and the shared skills should match in all five templates,
-# apart from the template's own name. This lives here, not in a template, so it never ends up in
+# Application, Infrastructure, their tests, every skill but the presentation ones, and the build,
+# agent, community and GitHub files should match in all five templates, apart from the template's
+# own name. This lives here, not in a template, so it never ends up in
 # anyone's copy of one. It only reads the public template repositories.
 
 on:
@@ -60,13 +61,51 @@ jobs:
           set -uo pipefail
 
           reference=CleanMinimalApi
-          shared=(src/Application src/Infrastructure tests/Application.Tests.Unit tests/Infrastructure.Tests.Integration)
 
-          # Skills marked "scope: shared" travel with the shared layers.
+          # The shared layers and their tests.
+          shared=(
+            src/Application
+            src/Infrastructure
+            tests/Application.Tests.Unit
+            tests/Infrastructure.Tests.Integration
+          )
+
+          # Build, style, agent, community and GitHub files that every template carries unchanged.
+          shared+=(
+            .agents/agents/jacques.md
+            .dockerignore
+            .editorconfig
+            .gitattributes
+            .gitignore
+            CLAUDE.md
+            CODE_OF_CONDUCT.md
+            Directory.Build.props
+            LICENSE.md
+            NuGet.config
+            SECURITY.md
+            global.json
+            otel-collector.yaml
+            .github/CODEOWNERS
+            .github/FUNDING.yml
+            .github/ISSUE_TEMPLATE/config.yml
+            .github/ISSUE_TEMPLATE/feature_request.yml
+            .github/actions/pipeline-report
+            .github/dependabot.yml
+            .github/labeler.yml
+            .github/pull_request_template.md
+            .github/release.yml
+            .github/workflows/label-pull-requests.yml
+          )
+
+          # Every skill except the presentation ones. family-sync names all five templates, so
+          # it's compared as it is, without swapping the name.
+          verbatim=(.agents/skills/family-sync)
           for skill in "$reference"/.agents/skills/*/SKILL.md; do
-            if grep -q "^  scope: shared" "$skill"; then
-              shared+=("$(dirname "${skill#"$reference"/}")")
+            path=$(dirname "${skill#"$reference"/}")
+            if grep -q "^  scope: presentation" "$skill" || [[ " ${verbatim[*]} " == *" $path "* ]]; then
+              continue
             fi
+            shared+=("$path")
           done
 
           # Swap each template's name for the reference's, so only real differences are left.
@@ -79,6 +118,11 @@ jobs:
                 sed "s/$repo/$reference/g" "$file" > "$out/${file#"$repo"/}"
               done < <(find "$repo/$path" -type f -not -path '*/bin/*' -not -path '*/obj/*' -print0)
             done
+            for path in "${verbatim[@]}"; do
+              [ -e "$repo/$path" ] || continue
+              mkdir -p "$out/$(dirname "$path")"
+              cp -R "$repo/$path" "$out/$path"
+            done
           }
 
           normalise "$reference" "normalised/$reference"
@@ -87,7 +131,7 @@ jobs:
           {
             echo "## Shared layers drift"
             echo
-            echo "Compared with $reference. Paths: ${#shared[@]}."
+            echo "Compared with $reference. Paths: $(( ${#shared[@]} + ${#verbatim[@]} ))."
             echo
           } >> "$GITHUB_STEP_SUMMARY"
 
