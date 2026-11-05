@@ -17,7 +17,7 @@ These are [Lean Mean Clean Apps](https://leanmeancleanapps.github.io/) projects,
 | --- | --- |
 | A template | That template's own repository. Each one has its own contributing guide, because they have real build rules and a 95% coverage gate that doesn't negotiate. |
 | A logo, colour, token or social template | [brand](https://github.com/LeanMeanCleanApps/brand). Everything there is generated, so change the scripts and commit what the build makes. |
-| The website | [leanmeancleanapps.github.io](https://github.com/LeanMeanCleanApps/leanmeancleanapps.github.io). One page, Astro, no framework drama. |
+| The website | [leanmeancleanapps.github.io](https://github.com/LeanMeanCleanApps/leanmeancleanapps.github.io). The docs site, with a guide for every template. Astro and Starlight, no framework drama. |
 | The organisation profile or these shared files | [.github](https://github.com/LeanMeanCleanApps/.github). |
 
 ## Making a change
