@@ -72,9 +72,9 @@ Don't set Status or Done on by hand. Anything still open on the 2nd rolls into t
 
 | When | What |
 | --- | --- |
-| The 1st, 09:00 America/Chicago | Each template releases whatever is merged, if anything outside `.github/` changed |
+| The 1st, 09:17 America/Chicago | Each template releases whatever is merged, if anything outside `.github/` changed |
 | The 2nd | Project sync moves the release's items to `Released` and closes its milestone |
-| The 15th, 09:00 America/Chicago | Maintenance: Dependabot and the scheduled build |
+| The 15th, 09:17 America/Chicago | Maintenance: Dependabot and the scheduled build |
 
 A month has one theme and one pull request per repository. Merge by the date on the milestone; anything that slips moves to next month rather than rushing.
 
