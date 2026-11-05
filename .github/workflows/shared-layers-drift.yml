@@ -90,7 +90,6 @@ jobs:
             global.json
             otel-collector.yaml
             .github/CODEOWNERS
-            .github/FUNDING.yml
             .github/ISSUE_TEMPLATE/config.yml
             .github/ISSUE_TEMPLATE/feature_request.yml
             .github/actions/pipeline-report
