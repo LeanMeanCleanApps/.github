@@ -35,6 +35,8 @@ concurrency:
 jobs:
   sync:
     name: Sync
+    # Forks don't have our app or secrets, so this only runs in the organisation's own repository.
+    if: github.repository_owner == 'LeanMeanCleanApps'
     runs-on: ubuntu-latest
     steps:
       - name: Check out
