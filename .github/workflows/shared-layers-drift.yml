@@ -98,6 +98,7 @@ jobs:
             .github/pull_request_template.md
             .github/release.yml
             .github/workflows/label-pull-requests.yml
+            template/ci.yml
           )
 
           # Every skill except the presentation ones. family-sync names all five templates, so
