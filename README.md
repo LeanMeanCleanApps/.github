@@ -24,3 +24,7 @@ Two workflows run here, and that's as busy as this repository gets:
 
 - **Project sync** fills in the board when an issue closes, and rolls it over on the 2nd once all five templates have released.
 - **Shared Layers Drift** checks every Monday that the templates' shared files still match.
+
+## Working with agents
+
+`AGENTS.md` maps this repository for coding agents, and the `planning` skill in `.agents/skills` says how work is planned: decisions first, the plan as a checklist in an issue here, and a handoff when work stops. Neither is a community file, so they stay here.
