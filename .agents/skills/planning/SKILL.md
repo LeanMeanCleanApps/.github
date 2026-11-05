@@ -61,6 +61,8 @@ Don't set Status or Done on by hand. Anything still open on the 2nd rolls into t
 
 ### 4. Branches and pull requests
 
+One pull request per repository for each completed feature, so cut each issue at the size of the pull request you'd want to review: one feature, one issue, one pull request per repository that closes it. A decision made partway through a feature goes on that feature's branch, not a new pull request. Small, unrelated fixes still get their own `fix/` branch.
+
 1. Branch names start with `feature/`, `fix/` or `chore/`. Rulesets reject anything else.
 2. Shared changes go to the templates in this order, with the same branch name, title and description: Minimal API, MCP, GraphQL, Web API, Lambda Function (`family-sync` in any template).
 3. Link each pull request to the issue: `Part of LeanMeanCleanApps/.github#30` on every one but the last to merge, `Closes LeanMeanCleanApps/.github#30` on the last, usually Lambda Function.
@@ -76,7 +78,7 @@ Don't set Status or Done on by hand. Anything still open on the 2nd rolls into t
 | The 2nd | Project sync moves the release's items to `Released` and closes its milestone |
 | The 15th, 09:17 America/Chicago | Maintenance: Dependabot and the scheduled build |
 
-A month has one theme and one pull request per repository. Merge by the date on the milestone; anything that slips moves to next month rather than rushing.
+A month holds as many features as are ready. Merge by the date on the milestone; anything that slips moves to next month rather than rushing.
 
 ### 6. Leave a handoff
 
@@ -100,6 +102,7 @@ Write it as you stop, so the next person or agent can start from the issue alone
 - Open issues in a template repository. They live here, so the board sees them.
 - Keep a decision log or put decision history in skills or docs. They say how things are now.
 - Use another branch prefix, merge a pull request, or skip the `Part of` and `Closes` links.
+- Open a second pull request for a decision made partway through a feature, or split one feature's pull request in a repository across branches.
 - Add AI attribution lines, tool footers, or "Testing" and "Not in this PR" sections to pull requests or commits. Commits are authored by the maintainer.
 - Call the project a hobby or over-engineered. It's a side project built to production standards.
 
