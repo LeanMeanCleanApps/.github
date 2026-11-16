@@ -6,9 +6,9 @@ body:
   - type: markdown
     attributes:
       value: |
-        Thanks for taking the time to report a bug. Please search the existing issues in this repository first, and report security vulnerabilities through the [security policy](https://github.com/LeanMeanCleanApps/.github/blob/main/SECURITY.md) instead.
+        Thanks for taking the time to report a bug. Somebody was always going to find it, and we'd rather it was you than a stranger on the internet with a screenshot. Please search the existing issues in this repository first, and report security vulnerabilities through the [security policy](https://github.com/LeanMeanCleanApps/.github/blob/main/SECURITY.md) instead.
 
-        Found a bug in one of the templates themselves? Each template has its own bug form, so open it in that template's repository: [Minimal API](https://github.com/LeanMeanCleanApps/CleanMinimalApi/issues/new/choose), [Model Context Protocol](https://github.com/LeanMeanCleanApps/CleanModelContextProtocol/issues/new/choose), [GraphQL](https://github.com/LeanMeanCleanApps/CleanGraphQLApi/issues/new/choose), [Web API](https://github.com/LeanMeanCleanApps/CleanWebApi/issues/new/choose) or [Lambda Function](https://github.com/LeanMeanCleanApps/CleanLambdaFunction/issues/new/choose).
+        Found a bug in one of the templates themselves? Each template has its own bug form, so open it in that template's repository, where it'll get the attention it so richly deserves: [Minimal API](https://github.com/LeanMeanCleanApps/CleanMinimalApi/issues/new/choose), [Model Context Protocol](https://github.com/LeanMeanCleanApps/CleanModelContextProtocol/issues/new/choose), [GraphQL](https://github.com/LeanMeanCleanApps/CleanGraphQLApi/issues/new/choose), [Web API](https://github.com/LeanMeanCleanApps/CleanWebApi/issues/new/choose) or [Lambda Function](https://github.com/LeanMeanCleanApps/CleanLambdaFunction/issues/new/choose).
   - type: textarea
     id: description
     attributes:
@@ -31,14 +31,14 @@ body:
     id: expected
     attributes:
       label: Expected behaviour
-      description: What you expected to happen instead.
+      description: What you expected to happen instead. Reasonable expectations only, please.
     validations:
       required: true
   - type: input
     id: environment
     attributes:
       label: Browser and operating system
-      description: If it's on the website, which browser and device?
+      description: If it's on the website, which browser and device? "My phone" narrows it down to roughly seven billion.
       placeholder: "Firefox 140 on Windows 11, Safari on iOS 26"
   - type: textarea
     id: logs
