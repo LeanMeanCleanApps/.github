@@ -1,0 +1,48 @@
+name: Feature request
+description: Suggest an improvement to the website, the brand files or how the organisation works.
+title: "[Feature]: "
+labels: ["enhancement"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for the suggestion. Good ideas are always welcome, and so are the strange ones.
+
+        Got an idea for one of the templates themselves? Suggest it in that template's repository: [Minimal API](https://github.com/LeanMeanCleanApps/CleanMinimalApi/issues/new/choose), [Model Context Protocol](https://github.com/LeanMeanCleanApps/CleanModelContextProtocol/issues/new/choose), [GraphQL](https://github.com/LeanMeanCleanApps/CleanGraphQLApi/issues/new/choose), [Web API](https://github.com/LeanMeanCleanApps/CleanWebApi/issues/new/choose) or [Lambda Function](https://github.com/LeanMeanCleanApps/CleanLambdaFunction/issues/new/choose).
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem
+      description: What problem would this solve? For example, "I'm always frustrated when ..."
+    validations:
+      required: true
+  - type: textarea
+    id: solution
+    attributes:
+      label: Proposed solution
+      description: What would you like to happen?
+    validations:
+      required: true
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives considered
+      description: Any other approaches or workarounds you've thought about.
+  - type: dropdown
+    id: contribute
+    attributes:
+      label: Would you like to work on it?
+      options:
+        - "Yes, I'd like to open a pull request"
+        - "No, I'm just suggesting it"
+    validations:
+      required: true
+  - type: checkboxes
+    id: checks
+    attributes:
+      label: Before submitting
+      options:
+        - label: I searched the existing issues and this hasn't been suggested yet.
+          required: true
+        - label: I agree to follow this project's [code of conduct](https://github.com/LeanMeanCleanApps/.github/blob/main/CODE_OF_CONDUCT.md).
+          required: true
