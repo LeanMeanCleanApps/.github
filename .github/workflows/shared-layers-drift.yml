@@ -133,7 +133,7 @@ jobs:
               [ -e "$repo/$path" ] || continue
               while IFS= read -r -d '' file; do
                 mkdir -p "$out/$(dirname "${file#"$repo"/}")"
-                sed -e "s/$repo/$reference/g" -e "s/${repo,,}/${reference,,}/g" -e "s|leanmeancleanapps.github.io/$key/|leanmeancleanapps.github.io/minimalapi/|g" "$file" > "$out/${file#"$repo"/}"
+                sed -e "s/$repo/$reference/g" -e "s/${repo,,}/${reference,,}/g" -e "s|leanmeanclean.dev/$key/|leanmeanclean.dev/minimalapi/|g" "$file" > "$out/${file#"$repo"/}"
               done < <(find "$repo/$path" -type f -not -path '*/bin/*' -not -path '*/obj/*' -print0)
             done
             for path in "${verbatim[@]}"; do

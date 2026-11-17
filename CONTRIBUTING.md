@@ -2,7 +2,7 @@
 
 Thanks for stopping by. Bug reports, ideas, typo fixes and pull requests are all welcome, in that order of how quickly they get a reply.
 
-These are [Lean Mean Clean Apps](https://leanmeancleanapps.github.io/) projects, built and looked after in spare time by a small team, with strong coffee and a healthy disregard for pomp and ceremony. Small as in one person, for now, so replies are best effort, and the fastest way to get something changed is to make it easy to say yes to. If you'd like to make it two, pull requests are how that starts.
+These are [Lean Mean Clean Apps](https://leanmeanclean.dev/) projects, built and looked after in spare time by a small team, with strong coffee and a healthy disregard for pomp and ceremony. Small as in one person, for now, so replies are best effort, and the fastest way to get something changed is to make it easy to say yes to. If you'd like to make it two, pull requests are how that starts.
 
 ## Before you start
 
@@ -17,7 +17,7 @@ These are [Lean Mean Clean Apps](https://leanmeancleanapps.github.io/) projects,
 | --- | --- |
 | A template | That template's own repository. Each one has its own contributing guide, because they have real build rules and a 95% coverage gate that doesn't negotiate. |
 | A logo, colour, token or social template | [brand](https://github.com/LeanMeanCleanApps/brand). Everything there is generated, so change the scripts and commit what the build makes. |
-| The website | [leanmeancleanapps.github.io](https://github.com/LeanMeanCleanApps/leanmeancleanapps.github.io). The docs site, with a guide for every template. Astro and Starlight, no framework drama. |
+| The website | [leanmeancleanapps.github.io](https://github.com/LeanMeanCleanApps/leanmeancleanapps.github.io). The docs site at [leanmeanclean.dev](https://leanmeanclean.dev), with a guide for every template. Astro and Starlight, no framework drama. |
 | The organisation profile or these shared files | [.github](https://github.com/LeanMeanCleanApps/.github). |
 
 ## Making a change
