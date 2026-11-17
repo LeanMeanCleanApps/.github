@@ -89,11 +89,11 @@ jobs:
             LICENSE.md
             NuGet.config
             SECURITY.md
+            SUPPORT.md
             global.json
             otel-collector.yaml
             .github/CODEOWNERS
-            .github/ISSUE_TEMPLATE/config.yml
-            .github/ISSUE_TEMPLATE/feature_request.yml
+            .github/ISSUE_TEMPLATE
             .github/actions/pipeline-report
             .github/dependabot.yml
             .github/labeler.yml
@@ -115,7 +115,7 @@ jobs:
             shared+=("$path")
           done
 
-          # Swap each template's name and docs site key for the reference's, so only real differences are left.
+          # Swap each template's name, its lowercase short name (as in dotnet new) and docs site key for the reference's, so only real differences are left.
           site_key() {
             case $1 in
               CleanMinimalApi) echo minimalapi ;;
@@ -133,7 +133,7 @@ jobs:
               [ -e "$repo/$path" ] || continue
               while IFS= read -r -d '' file; do
                 mkdir -p "$out/$(dirname "${file#"$repo"/}")"
-                sed -e "s/$repo/$reference/g" -e "s|leanmeancleanapps.github.io/$key/|leanmeancleanapps.github.io/minimalapi/|g" "$file" > "$out/${file#"$repo"/}"
+                sed -e "s/$repo/$reference/g" -e "s/${repo,,}/${reference,,}/g" -e "s|leanmeancleanapps.github.io/$key/|leanmeancleanapps.github.io/minimalapi/|g" "$file" > "$out/${file#"$repo"/}"
               done < <(find "$repo/$path" -type f -not -path '*/bin/*' -not -path '*/obj/*' -print0)
             done
             for path in "${verbatim[@]}"; do
