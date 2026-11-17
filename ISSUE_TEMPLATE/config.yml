@@ -2,7 +2,7 @@ blank_issues_enabled: true
 contact_links:
   - name: Security vulnerability
     url: https://github.com/LeanMeanCleanApps/.github/blob/main/SECURITY.md
-    about: Please report security problems privately, not as an issue. The policy says how.
+    about: Please report security problems privately, not as an issue. Some things are best not announced to the whole internet. The policy says how.
   - name: Getting help
     url: https://github.com/LeanMeanCleanApps/.github/blob/main/SUPPORT.md
-    about: Where to look first, and how to support the work.
+    about: Where to look first, and how to support the work and keep the coffee flowing.
