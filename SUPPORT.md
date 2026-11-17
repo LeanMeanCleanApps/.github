@@ -6,7 +6,7 @@
 - **Found a bug or have an idea?** Open an issue in the repository it's about. A clear title and a way to reproduce it will get you a faster answer than a long story.
 - **Found a security vulnerability?** Don't open an issue. Follow the [security policy](SECURITY.md).
 
-These are [Lean Mean Clean Apps](https://leanmeancleanapps.github.io/) projects, looked after in spare time by a team that is currently one person with a day job and a coffee habit, so replies are best effort. They do arrive.
+These are [Lean Mean Clean Apps](https://leanmeanclean.dev/) projects, looked after in spare time by a team that is currently one person with a day job and a coffee habit, so replies are best effort. They do arrive.
 
 ## Supporting the work
 

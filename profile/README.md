@@ -12,6 +12,6 @@ Every template is built on .NET 10 with the same Application and Infrastructure 
 | <img src="https://raw.githubusercontent.com/LeanMeanCleanApps/brand/main/assets/logos/webapi/png/webapi-tile-128.png" width="64" alt=""> | [Clean Web API](https://github.com/LeanMeanCleanApps/CleanWebApi) | ASP.NET Core Web APIs | `dotnet new install CleanWebApi.Template` |
 | <img src="https://raw.githubusercontent.com/LeanMeanCleanApps/brand/main/assets/logos/lambda/png/lambda-tile-128.png" width="64" alt=""> | [Clean Lambda Function](https://github.com/LeanMeanCleanApps/CleanLambdaFunction) | AWS Lambda | `dotnet new install CleanLambdaFunction.Template` |
 
-The guides, reference and reasoning for every template live at [leanmeancleanapps.github.io](https://leanmeancleanapps.github.io), and the logos, colours and social templates live in [brand](https://github.com/LeanMeanCleanApps/brand), with their own [brand site](https://leanmeancleanapps.github.io/brand/).
+The guides, reference and reasoning for every template live at [leanmeanclean.dev](https://leanmeanclean.dev), and the logos, colours and social templates live in [brand](https://github.com/LeanMeanCleanApps/brand), with their own [brand site](https://leanmeanclean.dev/brand/).
 
 If these save you some time, you can [sponsor the work](https://github.com/sponsors/stphnwlsh). Made by the Lean Mean Clean Apps team, which is [Stephen Walsh](https://github.com/stphnwlsh) for now, with strong coffee and a healthy disregard for pomp and ceremony.
