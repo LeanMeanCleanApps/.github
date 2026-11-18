@@ -27,7 +27,11 @@ These are [Lean Mean Clean Apps](https://leanmeanclean.dev/) projects, built and
 1. Run whatever the repository's README tells you to run before you push. Each one is small and says so.
 1. Open the pull request against `main`, fill in the template, and link the issue if there is one.
 
-Every pull request is reviewed by the maintainer before it goes in. That's not a lack of trust, it's just how the lights stay on. If a review takes a while, a polite nudge is fine.
+If your change touches anything people read or click, keep it usable for everyone: alt text on images that mean something, link text that makes sense on its own, headings in order, and never colour alone to say something. The [accessibility statement](ACCESSIBILITY.md) has the rest.
+
+Contributions come in under the same MIT licence as the repository they're for. There's no CLA to sign, no form to fax, and no lawyer in sight.
+
+Every pull request is reviewed by the maintainer before it goes in. That's not a lack of trust, it's just how the lights stay on. If a review takes a while, a polite nudge is fine. [Governance](GOVERNANCE.md) says how decisions get made, and what's in scope.
 
 ## Saying thanks
 

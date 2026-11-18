@@ -7,7 +7,8 @@
 The shared bits of the [Lean Mean Clean Apps](https://github.com/LeanMeanCleanApps) organisation.
 
 - `profile/README.md` is the page you see at [github.com/LeanMeanCleanApps](https://github.com/LeanMeanCleanApps).
-- Everything else is a default community file. GitHub shows it in any organisation repository that doesn't have its own: the code of conduct, the contributing guide, the security policy, the support page, the pull request template, and the bug and feature request forms with their links. The five templates have forms of their own, so these only show up in the other repositories.
+- Everything else is a default community file. GitHub shows it in any organisation repository that doesn't have its own: the code of conduct, the contributing guide, governance, the security policy, the support page, the pull request template, and the bug, feature request and accessibility barrier forms with their links.
+- `ACCESSIBILITY.md` and `LICENSE` are the exceptions. GitHub doesn't hand those down, so every repository keeps its own `ACCESSIBILITY.md`, and Shared Layers Drift keeps the templates' copies the same. The five templates have forms of their own, so these only show up in the other repositories.
 
 Change these here and every repository picks them up.
 

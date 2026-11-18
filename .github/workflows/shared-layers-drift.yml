@@ -91,6 +91,7 @@ jobs:
             .editorconfig
             .gitattributes
             .gitignore
+            ACCESSIBILITY.md
             CLAUDE.md
             CODE_OF_CONDUCT.md
             Directory.Build.props
