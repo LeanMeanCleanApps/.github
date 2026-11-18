@@ -14,4 +14,6 @@ Every template is built on .NET 10 with the same Application and Infrastructure 
 
 The guides, reference and reasoning for every template live at [leanmeanclean.dev](https://leanmeanclean.dev), and the logos, colours and social templates live in [brand](https://github.com/LeanMeanCleanApps/brand), with their own [brand site](https://leanmeanclean.dev/brand/).
 
+Questions and show and tell go in [Discussions](https://github.com/orgs/LeanMeanCleanApps/discussions). How decisions get made is in [governance](https://github.com/LeanMeanCleanApps/.github/blob/main/GOVERNANCE.md), and the [accessibility statement](https://leanmeanclean.dev/accessibility/) says how to tell us when something gets in your way.
+
 If these save you some time, you can [sponsor the work](https://github.com/sponsors/stphnwlsh). Made by the Lean Mean Clean Apps team, which is [Stephen Walsh](https://github.com/stphnwlsh) for now, with strong coffee and a healthy disregard for pomp and ceremony.

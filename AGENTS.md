@@ -7,8 +7,9 @@ This is the shared repository for the Lean Mean Clean Apps organisation: the org
 | Path | What it is |
 | --- | --- |
 | `profile/README.md` | The page at github.com/LeanMeanCleanApps |
-| `CODE_OF_CONDUCT.md`, `CONTRIBUTING.md`, `SECURITY.md`, `SUPPORT.md`, `FUNDING.yml`, `pull_request_template.md`, `ISSUE_TEMPLATE/` | Default community files every organisation repository without its own picks up |
+| `CODE_OF_CONDUCT.md`, `CONTRIBUTING.md`, `GOVERNANCE.md`, `SECURITY.md`, `SUPPORT.md`, `FUNDING.yml`, `pull_request_template.md`, `ISSUE_TEMPLATE/` | Default community files every organisation repository without its own picks up |
 | `.github/workflows/project-sync.yml`, `.github/scripts/project_sync.py` | Keeps the project board up to date when issues close and after each monthly release |
+| `ACCESSIBILITY.md`, `LICENSE` | This repository's own accessibility pointer and licence. GitHub doesn't pass either down, so every repository carries its own `ACCESSIBILITY.md` |
 | `issue-forms/` | The pool of issue forms the templates share, with `{{repo}}`, `{{short-name}}` and `{{docs-key}}` placeholders. Each template keeps filled-in copies of the ones it uses, plus any of its own |
 | `.github/workflows/shared-layers-drift.yml` | Checks every Monday that the five templates' shared files still match, and that their issue forms match the pool |
 | `.agents/skills` | How we do things here, one skill per folder |

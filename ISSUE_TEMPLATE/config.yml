@@ -1,5 +1,8 @@
 blank_issues_enabled: true
 contact_links:
+  - name: Ask a question
+    url: https://github.com/orgs/LeanMeanCleanApps/discussions
+    about: How do I...? Ask in Discussions, where the answer helps the next person too.
   - name: Security vulnerability
     url: https://github.com/LeanMeanCleanApps/.github/blob/main/SECURITY.md
     about: Please report security problems privately, not as an issue. Some things are best not announced to the whole internet. The policy says how.
