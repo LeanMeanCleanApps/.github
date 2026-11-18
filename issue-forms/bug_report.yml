@@ -1,0 +1,94 @@
+name: Bug report
+description: The template or a solution made from it does something it shouldn't, or doesn't do something it should.
+title: "[Bug]: "
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for taking the time to report a bug. Every bug found here is one that doesn't end up in somebody's production, possibly yours.
+
+        A few things first:
+        - Can't get as far as a working solution? The **Template creation problem** form asks the right questions for that.
+        - The [troubleshooting page](https://leanmeanclean.dev/{{docs-key}}/reference/troubleshooting/) covers the usual suspects. It's short, and it might save you a form.
+        - Security vulnerabilities go through the [security policy](https://github.com/LeanMeanCleanApps/{{repo}}/security/policy), not a public issue.
+  - type: textarea
+    id: description
+    attributes:
+      label: What happened?
+      description: A clear description of the bug. Screenshots are welcome; screenshots of code are not.
+    validations:
+      required: true
+  - type: textarea
+    id: reproduce
+    attributes:
+      label: Steps to reproduce
+      description: The commands you ran and the steps that trigger the bug. "It doesn't work" is a feeling, not a reproduction.
+      placeholder: |
+        1. dotnet new install {{repo}}.Template
+        2. dotnet new {{short-name}} --name Sample
+        3. ...
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected behaviour
+      description: What you expected to happen instead. Reasonable expectations only, please.
+    validations:
+      required: true
+  - type: input
+    id: template-version
+    attributes:
+      label: Template version
+      description: Run `dotnet new list {{short-name}}` or check NuGet. "The latest one" was true when you installed it.
+      placeholder: "2026.11.01.264"
+    validations:
+      required: true
+  - type: input
+    id: sdk-version
+    attributes:
+      label: .NET SDK version
+      description: Run `dotnet --version`.
+      placeholder: "10.0.100"
+    validations:
+      required: true
+  - type: dropdown
+    id: environment
+    attributes:
+      label: Where does it happen?
+      multiple: true
+      options:
+        - Running with the .NET CLI
+        - Running in Docker
+        - Running the tests
+        - The GitHub Actions pipeline
+        - In my IDE
+        - Somewhere else
+    validations:
+      required: true
+  - type: input
+    id: os
+    attributes:
+      label: Operating system
+      placeholder: "Windows 11, macOS 26, Ubuntu 24.04"
+  - type: textarea
+    id: changes
+    attributes:
+      label: What have you changed?
+      description: Anything you changed in the generated solution before it broke. "Nothing" is a fine answer, as long as it's true.
+  - type: textarea
+    id: logs
+    attributes:
+      label: Relevant logs or output
+      description: Paste any error messages or stack traces. This is rendered as code, so no backticks are needed.
+      render: shell
+  - type: checkboxes
+    id: checks
+    attributes:
+      label: Before submitting
+      options:
+        - label: I searched the existing issues and this hasn't been reported yet.
+          required: true
+        - label: I agree to follow this project's [code of conduct](https://github.com/LeanMeanCleanApps/{{repo}}/blob/main/CODE_OF_CONDUCT.md).
+          required: true

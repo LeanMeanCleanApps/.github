@@ -2,7 +2,8 @@ name: Shared Layers Drift
 
 # Application, Infrastructure, their tests, every skill but the presentation ones, and the build,
 # agent, community and GitHub files should match in all five templates, apart from the template's
-# own name, and any package two or more of them use should be on the same version. This lives here, not in a template, so it never ends up in anyone's copy of one. It only
+# own name, and any package two or more of them use should be on the same version. Each template's
+# issue forms should match the pool in issue-forms/ here, apart from the forms that are its own. This lives here, not in a template, so it never ends up in anyone's copy of one. It only
 # reads the public template repositories. When something drifts, it writes a prompt you can hand
 # to an agent and keeps one issue open here with it, then closes that issue once it's green again.
 
@@ -25,6 +26,13 @@ jobs:
     if: github.repository_owner == 'LeanMeanCleanApps'
     runs-on: ubuntu-latest
     steps:
+      - name: Check out the issue form pool
+        uses: actions/checkout@v7
+        with:
+          path: pool
+          sparse-checkout: issue-forms
+          persist-credentials: false
+
       - name: Check out Minimal API
         uses: actions/checkout@v7
         with:
@@ -93,7 +101,6 @@ jobs:
             global.json
             otel-collector.yaml
             .github/CODEOWNERS
-            .github/ISSUE_TEMPLATE
             .github/actions/pipeline-report
             .github/dependabot.yml
             .github/labeler.yml
@@ -168,6 +175,44 @@ jobs:
             fi
           done
 
+          # Each template carries copies of the pool forms it uses, with its own name, short name and docs
+          # site key filled in. A pool form a template doesn't carry is skipped, and a form that isn't in
+          # the pool is the template's own, so it's listed but not compared.
+          for repo in CleanMinimalApi CleanModelContextProtocol CleanGraphQLApi CleanWebApi CleanLambdaFunction; do
+            key=$(site_key "$repo")
+            forms="$repo/.github/ISSUE_TEMPLATE"
+            mkdir -p "rendered/$repo"
+            used=() skipped=() own=() differing=()
+            for form in pool/issue-forms/*.yml; do
+              name=$(basename "$form")
+              if [ ! -e "$forms/$name" ]; then
+                skipped+=("$name")
+                continue
+              fi
+              used+=("$name")
+              sed -e "s/{{repo}}/$repo/g" -e "s/{{short-name}}/${repo,,}/g" -e "s/{{docs-key}}/$key/g" "$form" > "rendered/$repo/$name"
+              if ! diff -q "rendered/$repo/$name" "$forms/$name" > /dev/null; then
+                differing+=("$name")
+                diff -u --label "pool/issue-forms/$name" --label "$forms/$name" "rendered/$repo/$name" "$forms/$name" >> drift/full.diff || true
+              fi
+            done
+            for form in "$forms"/*.yml; do
+              [ -e "$form" ] || continue
+              [ -e "pool/issue-forms/$(basename "$form")" ] || own+=("$(basename "$form")")
+            done
+
+            if [ ${#differing[@]} -eq 0 ]; then
+              line="- ✅ $repo issue forms match the pool (${#used[@]} used"
+            else
+              listed=$(printf '  - %s\n' "${differing[@]/#/$forms/}")
+              printf -- '- %s issue forms differ from the pool:\n%s\n' "$repo" "$listed" >> drift/files.md
+              line="- ❌ $repo issue forms differ from the pool: ${differing[*]} (${#used[@]} used"
+            fi
+            [ ${#skipped[@]} -eq 0 ] || line+=", not used: ${skipped[*]}"
+            [ ${#own[@]} -eq 0 ] || line+=", its own: ${own[*]}"
+            echo "$line)" >> "$GITHUB_STEP_SUMMARY"
+          done
+
           # Any package that two or more templates use should be on the same version in all of them.
           versions() {
             grep -o '<PackageVersion Include="[^"]*" Version="[^"]*"' "$1/Directory.Packages.props" |
@@ -224,8 +269,9 @@ jobs:
           3. If more than one copy changed and they disagree, or you can't tell which change was intended, stop and ask before you change anything. Say which files and which pull requests.
           4. Follow family-sync. If CleanMinimalApi needs the change, make it there first. Then open the same branch, chore/sync-shared-files, with the same title and description in every template that needs it, in this order: MCP, GraphQL, Web API, Lambda Function. Swap the template name the way family-sync says, and copy family-sync itself as it is.
           5. Run dotnet build, dotnet test and dotnet format --verify-no-changes in every template you change, and keep line coverage at or above 95%.
-          6. Prove the copies match with the commands under Check in family-sync. Don't merge anything yourself.
-          7. Once the pull requests are merged, run the Shared Layers Drift workflow in LeanMeanCleanApps/.github from the Actions tab. It closes the drift issue when everything matches.
+          6. Issue forms are the exception to steps 2 and 4: the pool in issue-forms/ in LeanMeanCleanApps/.github is the master copy. If a template's copy has a change worth keeping, open a pull request for the pool first, then copy it into every template that uses that form, filling in {{repo}}, {{short-name}} and {{docs-key}}. Otherwise put the template's copy back to match the pool. Forms that aren't in the pool are the template's own and never need syncing.
+          7. Prove the copies match with the commands under Check in family-sync. Don't merge anything yourself.
+          8. Once the pull requests are merged, run the Shared Layers Drift workflow in LeanMeanCleanApps/.github from the Actions tab. It closes the drift issue when everything matches.
           EOF
             echo
             echo "The check that found this: $RUN_URL"
